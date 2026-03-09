@@ -1,26 +1,43 @@
 <template>
   <h1>{{ message }}</h1>
-  <p>
-    What has keys but can't open locks, space but no room, and you can enter but
-    can't go outside? What am I?
-  </p>
-
-  <button style="width: 200px" @click="showAnswer = !showAnswer">
-    {{ !showAnswer ? 'Show me the answer!' : 'Hide the answer!' }}
-  </button>
-
-  <div v-if="showAnswer">A keyboard.</div>
-
-  <div v-show="showAnswer">A keyboard.</div>
-
+  <button @click="sortUsersByAge">Sort users by age</button>
+  <button @click="hideInactiveUsers">Hide inactive users</button>
+  <button @click="showFirstTwoUsers">Show first two users</button>
+  <ul>
+    <li v-for="(user, index) in users" :key="user.id">
+      {{ index }} - {{ user.id }} - {{ user.name }} - {{ user.age }} -
+      {{ user.isActive }}
+    </li>
+  </ul>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 
-let message = ref('Hello, v-if!')
+let message = ref('Hello, Array Change Detection!')
 
-let showAnswer = ref(false)
+const users = ref([
+  { id: 1001, name: 'John Smith', age: 26, isActive: false },
+  { id: 1002, name: 'Tom Doe', age: 16, isActive: false },
+  { id: 1003, name: 'Frankin Wong', age: 18, isActive: true }
+])
+
+function sortUsersByAge() {
+  users.value.sort((a, b) => a.age - b.age)
+}
+
+function hideInactiveUsers() {
+  users.value = users.value.filter((user) => user.isActive)
+}
+
+function showFirstTwoUsers() {
+  users.value = users.value.slice(0, 2)
+}
 </script>
 
-<style scoped></style>
+<style scoped>
+.inactive {
+  color: red;
+  text-decoration: line-through;
+}
+</style>
